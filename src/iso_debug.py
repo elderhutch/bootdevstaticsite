@@ -1,17 +1,25 @@
-from htmlnode import *
+import re
+import os
+import shutil
 
-props = {
-    "href": "https://www.google.com",
-    "target": "_blank",
-}
+text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
 
-testing = HTMLNode("<a>", "This is the text", None, props)
-readout = testing.props_to_html()
-leaftest = LeafNode("<a>", "Testing Text", props)
-leaftest2 = LeafNode("<a>", "Testing Text")
-leaftest3 = LeafNode("", "Test")
-leaftest4 = leaftest3.to_html
 
-#print(leaftest.props_to_html)
+def extract_markdown_images(text):
+    pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
 
-print(leaftest4)
+
+def extract_markdown_links(text):
+    pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
+    matches = re.findall(pattern, text)
+    return matches
+
+def copy_to_public():
+    # os.mkdir("../public")
+    if os.path.isdir("../public"):
+        shutil.rmtree("../public/")
+    shutil.copytree("../static/", "../public/")
+
+copy_to_public()
